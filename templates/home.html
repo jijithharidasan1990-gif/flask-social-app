@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<h3>All Posts</h3>
+
+{% for post in posts %}
+<div style="border:1px solid gray;padding:10px;margin:10px;">
+    
+    <b>{{ post.user_id }}</b>: {{ post.content }} <br>
+
+    <!-- Unique like button and counter -->
+    <button onclick="increaseLike({{ post.id }})">👍 Like</button>
+    <span id="likeCount-{{ post.id }}">0</span>
+
+    {% if post.media %}
+        <br><img src="/static/uploads/{{ post.media }}" width="200"><br>
+    {% endif %}
+
+    {% if post.user_id == current_user.id %}
+        <a href="/delete/{{ post.id }}">Delete</a>
+    {% endif %}
+</div>
+{% endfor %}
+
+<!-- Put JavaScript OUTSIDE the loop -->
+<script>
+function increaseLike(postId) {
+    // find the right like counter for this post
+    let span = document.getElementById("likeCount-" + postId);
+    let current = parseInt(span.textContent);
+
+    span.textContent = current + 1;
+}
+</script>
+
+{% endblock %}
